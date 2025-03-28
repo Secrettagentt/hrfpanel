@@ -3,13 +3,19 @@
   "builds": [
     {
       "src": "heart.js",
-      "use": "@vercel/static-build"
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/",
       "dest": "heart.js"
+    }
+  ],
+  "functions": [
+    {
+      "src": "heart.js",
+      "use": "@vercel/node"
     }
   ]
 }
