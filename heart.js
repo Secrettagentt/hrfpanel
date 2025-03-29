@@ -13,10 +13,10 @@ dotenv.config();
 const app = express();
 const PORT = 4000;
 
-
+const heartt = process.env.dbConnectionStr
 const dbName = 'HRF';
 
-const client = new MongoClient(dbConnectionStr, { useUnifiedTopology: true });
+const client = new MongoClient(heartt, { useUnifiedTopology: true });
 let db;
 
 client.connect().then(() => {
@@ -38,7 +38,7 @@ const upload = multer({
     },
 });
 
-app.use(express.static('views'));
+app.use(express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(('./upload'),
