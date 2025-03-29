@@ -10,14 +10,11 @@
     {
       "src": "/",
       "dest": "index.html"
-
-      "src": "/api/(.*)",
-      "dest": "heart.js"
     },
     {
       "src": "/api/(.*)",
       "dest": "heart.js"
-    }
+    },
   ],
   "env": {
     "DB_CONNECTION_STR": "mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

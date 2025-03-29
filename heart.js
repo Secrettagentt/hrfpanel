@@ -17,7 +17,7 @@ const heartt = process.env.dbConnectionStr
 const dbName = 'HRF';
 
 
-const dbConnectionSr = 'mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+const dbConnectionStr = 'mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 
 const client = new MongoClient(dbConnectionSr, { useUnifiedTopology: true });
