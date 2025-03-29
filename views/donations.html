@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+        }
+        .card {
+            background-color: #B3FFB3; /* Lighter green background */
+        }
+        .donation-details-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFFFFF;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="loading-indicator">Loading...</div>
+        
+        <h1>Donations</h1>
+        
+        <div class="row" id="donations-container">
+            <!-- Donations cards will be generated here -->
+        </div>
+    </div>
+    <div id="donation-details-modal" class="donation-details-modal">
+        <button onclick="document.getElementById('donation-details-modal').style.display = 'none';" style="background-color: #FFFFFF; border: 1px solid #000000; color: #000000;">Close</button>
+        <div id="donation-details-content"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        fetch('/api/data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                const donationsContainer = document.getElementById('donations-container');
+                donationsContainer.innerHTML = '';
+                data.donations.forEach((donation, index) => {
+                    const donationHtml = `
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">#${data.donations.length - index} ${donation.donorName}</h6>
+                                    <button class="btn view-details" style="background-color: #FFFFFF; color: #008000; font-size: 12px;" data-donation='${JSON.stringify(donation)}'>View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    donationsContainer.innerHTML += donationHtml;
+                });
+                const buttons = document.querySelectorAll('.view-details');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const donation = button.getAttribute('data-donation');
+                        showDonationDetails(donation);
+                    });
+                });
+            })
+            .catch(error => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                console.error('Error fetching donations:', error);
+            });
+
+        function showDonationDetails(donation) {
+            const donationDetails = JSON.parse(donation);
+            const donationDetailsHtml = `
+                <h2 style="color: green;">Donation Details</h2>
+                <p>Donor Name: ${donationDetails.donorName}</p>
+                <p>Email Address: ${donationDetails.emailAddress}</p>
+                <p>Phone Number: ${donationDetails.phoneNumber}</p>
+                <p>Donation Amount: ${donationDetails.donationAmount}</p>
+                <p>Message: ${donationDetails.message}</p>
+                <p>Screenshot: <img src="/uploads/${donationDetails.screenshot}" alt="Donation Screenshot"></p>
+            `;
+            const donationDetailsModal = document.getElementById('donation-details-modal');
+            const donationDetailsContent = document.getElementById('donation-details-content');
+            donationDetailsContent.innerHTML = donationDetailsHtml;
+            donationDetailsModal.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

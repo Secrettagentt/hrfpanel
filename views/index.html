@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
+        .h1{
+            color : green !important;
+        }
         .card {
             cursor: pointer;
             background-color: #C6F4C6; /* Lighter green background */
@@ -16,24 +19,25 @@
         .card:hover {
             background-color: #B3FFB3; /* Lighter green on hover */
         }
-        .badge {
-            font-size: 16px;
-            background-color: #FFFFFF; /* White background for span */
-            color: #008000; /* Green text for span */
-            position: absolute;
-            right: 10px;
-            bottom: 5px; /* Adjust the top position */
-        }
-        header {
-            background-color: #8BC34A; /* Green background for header */
-            color: #FFFFFF; /* White text for header */
-        }
+      
+    .badge {
+  font-size: 16px;
+  background-color: #FFFFFF; /* White background for span */
+  color: #008000; /* Green text for span */
+  position: relative;
+  bottom: 2%; /* Move badge to 2% from bottom */
+        width: 35%;
+        height: 20%;
+        right: 100%;
+  border-radius: 10px; /* Make the shape a little rectangular */
+}
+
     </style>
 </head>
 <body>
     <!-- Header section -->
     <header class="p-3 text-center">
-        <h1 class="display-4 text-white">HEART RECOVERY FOUNDATION</h1>
+        <h1 class="display-4 text-white h1">HEART RECOVERY FOUNDATION</h1>
     </header>
     <!-- Main content section -->
     <main class="container mt-5">
@@ -44,7 +48,7 @@
                         <h2 class="card-title">Volunteers</h2>
                         <p class="card-text">View volunteer details</p>
                     </div>
-                    <span class="badge badge-pill"><%= volunteers.length %> Volunteers</span>
+                    <span id="volunteers-badge" class="badge"></span>
                 </div>
             </div>
             <div class="col-md-3 mb-3 position-relative">
@@ -53,7 +57,7 @@
                         <h2 class="card-title">Individual Sponsors</h2>
                         <p class="card-text">View individual sponsor details</p>
                     </div>
-                    <span class="badge badge-pill"><%= individualSponsors.length %> Sponsors</span>
+                    <span id="indsponsors-badge" class="badge"></span>
                 </div>
             </div>
             <div class="col-md-3 mb-3 position-relative">
@@ -62,7 +66,7 @@
                         <h2 class="card-title">Corporate Sponsors</h2>
                         <p class="card-text">View corporate sponsor details</p>
                     </div>
-                    <span class="badge badge-pill"><%= corporateSponsors.length %> Sponsors</span>
+                    <span id="corporatesponsors-badge" class="badge"></span>
                 </div>
             </div>
             <div class="col-md-3 mb-3 position-relative">
@@ -71,7 +75,7 @@
                         <h2 class="card-title">Patients</h2>
                         <p class="card-text">View patient details</p>
                     </div>
-                    <span class="badge badge-pill"><%= patients.length %> Patients</span>
+                    <span id="patients-badge" class="badge"></span>
                 </div>
             </div>
             <div class="col-md-3 mb-3 position-relative">
@@ -80,7 +84,7 @@
                         <h2 class="card-title">Contacts</h2>
                         <p class="card-text">View contact details</p>
                     </div>
-                    <span class="badge badge-pill"><%= contacts.length %> Contacts</span>
+                    <span id="contacts-badge" class="badge"></span>
                 </div>
             </div>
             <div class="col-md-3 mb-3 position-relative">
@@ -89,14 +93,36 @@
                         <h2 class="card-title">Donations</h2>
                         <p class="card-text">View donation details</p>
                     </div>
-                    <span class="badge badge-pill"><%= donations.length %> Donations</span>
+                    <span id="donations-badge" class="badge"></span>
                 </div>
             </div>
         </div>
     </main>
     <!-- Footer section -->
     <footer class="bg-dark text-white p-3 text-center mt-3">
-        <p>&copy; 2023 Heart Recovery Foundation</p>
+        <p>&copy; 2025 Heart Recovery Foundation</p>
     </footer>
+    <script>
+    fetch('/api/data')
+     .then(response => response.json())
+  .then(data => {
+    const volunteersCount = data.volunteers.length;
+    const indsponsorsCount = data.indsponsors.length;
+    const corporatesponsorsCount = data.corporatesponsors.length;
+    const patientsCount = data.patients.length;
+    const contactsCount = data.contacts.length;
+    const donationsCount = data.donations.length;
+
+    document.getElementById('volunteers-badge').innerText = `${volunteersCount} Volunteers`;
+    document.getElementById('indsponsors-badge').innerText = `${indsponsorsCount} Sponsors`;
+    document.getElementById('corporatesponsors-badge').innerText = `${corporatesponsorsCount} Sponsors`;
+    document.getElementById('patients-badge').innerText = `${patientsCount} Patients`;
+    document.getElementById('contacts-badge').innerText = `${contactsCount} Contacts`;
+    document.getElementById('donations-badge').innerText = `${donationsCount} Donations`;
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+</script>
 </body>
 </html>

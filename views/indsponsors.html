@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ind Sponsors</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+        }
+        .card {
+            background-color: #B3FFB3; /* Lighter green background */
+        }
+        .indsponsor-details-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFFFFF;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="loading-indicator">Loading...</div>
+        <h1>Ind Sponsors</h1>
+        <div class="row" id="indsponsors-container">
+            <!-- Ind Sponsors cards will be generated here -->
+        </div>
+    </div>
+    <div id="indsponsor-details-modal" class="indsponsor-details-modal">
+        <button onclick="document.getElementById('indsponsor-details-modal').style.display = 'none';" style="background-color: #FFFFFF; border: 1px solid #000000; color: #000000;">Close</button>
+        <div id="indsponsor-details-content"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        fetch('/api/indsponsors')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                const indsponsorsContainer = document.getElementById('indsponsors-container');
+                indsponsorsContainer.innerHTML = '';
+                data.forEach((indsponsor, index) => {
+                    const indsponsorHtml = `
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">#${data.length - index} ${indsponsor.name}</h6>
+                                    <button class="btn view-details" style="background-color: #FFFFFF; color: #008000; font-size: 12px;" data-indsponsor='${JSON.stringify(indsponsor)}'>View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    indsponsorsContainer.innerHTML += indsponsorHtml;
+                });
+                const buttons = document.querySelectorAll('.view-details');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const indsponsor = button.getAttribute('data-indsponsor');
+                        showIndSponsorDetails(indsponsor);
+                    });
+                });
+            })
+            .catch(error => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                console.error('Error fetching indsponsors:', error);
+            });
+
+        function showIndSponsorDetails(indsponsor) {
+            const indsponsorDetails = JSON.parse(indsponsor);
+            const indsponsorDetailsHtml = `
+                <h2 style="color: green;">Ind Sponsor Details</h2>
+                <p>Name: ${indsponsorDetails.name}</p>
+                <p>Email Address: ${indsponsorDetails.emailAddress}</p>
+                <p>Phone Number: ${indsponsorDetails.phoneNumber}</p>
+                <p>Message: ${indsponsorDetails.message}</p>
+            `;
+            const indsponsorDetailsModal = document.getElementById('indsponsor-details-modal');
+            const indsponsorDetailsContent = document.getElementById('indsponsor-details-content');
+            indsponsorDetailsContent.innerHTML = indsponsorDetailsHtml;
+            indsponsorDetailsModal.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

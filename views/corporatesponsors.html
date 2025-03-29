@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Sponsors</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+        }
+        .card {
+            background-color: #B3FFB3; /* Lighter green background */
+        }
+        .corporatesponsor-details-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFFFFF;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="loading-indicator">Loading...</div>
+        <h1>Corporate Sponsors</h1>
+        <div class="row" id="corporatesponsors-container">
+            <!-- Corporate Sponsors cards will be generated here -->
+        </div>
+    </div>
+    <div id="corporatesponsor-details-modal" class="corporatesponsor-details-modal">
+        <button onclick="document.getElementById('corporatesponsor-details-modal').style.display = 'none';" style="background-color: #FFFFFF; border: 1px solid #000000; color: #000000;">Close</button>
+        <div id="corporatesponsor-details-content"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        fetch('/api/corporatesponsors')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                const corporatesponsorsContainer = document.getElementById('corporatesponsors-container');
+                corporatesponsorsContainer.innerHTML = '';
+                data.forEach((corporatesponsor, index) => {
+                    const corporatesponsorHtml = `
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">#${data.length - index} ${corporatesponsor.companyName}</h6>
+                                    <button class="btn view-details" style="background-color: #FFFFFF; color: #008000; font-size: 12px;" data-corporatesponsor='${JSON.stringify(corporatesponsor)}'>View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    corporatesponsorsContainer.innerHTML += corporatesponsorHtml;
+                });
+                const buttons = document.querySelectorAll('.view-details');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const corporatesponsor = button.getAttribute('data-corporatesponsor');
+                        showCorporatesponsorDetails(corporatesponsor);
+                    });
+                });
+            })
+            .catch(error => {
+                document.getElementById('loading-indicator').style.display = 'none';
+                console.error('Error fetching corporatesponsors:', error);
+            });
+
+        function showCorporatesponsorDetails(corporatesponsor) {
+            const corporatesponsorDetails = JSON.parse(corporatesponsor);
+            const corporatesponsorDetailsHtml = `
+                <h2 style="color: green;">Corporatesponsor Details</h2>
+                <p>Company Name: ${corporatesponsorDetails.companyName}</p>
+                <p>Contact Person: ${corporatesponsorDetails.contactPerson}</p>
+                <p>Address: ${corporatesponsorDetails.address}</p>
+                <p>Phone Number: ${corporatesponsorDetails.phoneNumber}</p>
+                <p>Email Address: ${corporatesponsorDetails.emailAddress}</p>
+                <p>Message: ${corporatesponsorDetails.message}</p>
+            `;
+            const corporatesponsorDetailsModal = document.getElementById('corporatesponsor-details-modal');
+            const corporatesponsorDetailsContent = document.getElementById('corporatesponsor-details-content');
+            corporatesponsorDetailsContent.innerHTML = corporatesponsorDetailsHtml;
+            corporatesponsorDetailsModal.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

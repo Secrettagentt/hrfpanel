@@ -11,6 +11,10 @@ const PORT = 3000;
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+app.use('/uploads', express.static('uploads'));
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const theme = path.join(__dirname, '/../theme');

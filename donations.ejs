@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <style>
+        .card-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .card {
+            cursor: pointer;
+            background-color: #C6F4C6; /* Lighter green background */
+            color: #000000; /* Black text */
+            height: auto; /* Auto height for cards */
+            position: relative; /* Add this line */
+        }
+        .card:hover {
+            background-color: #B3FFB3; /* Lighter green on hover */
+        }
+        .view-details-link {
+            background-color: #FFFFFF; /* White background */
+            color: #008000; /* Green text */
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline */
+        }
+        .view-details-link.active {
+            color: #008000; /* Green text */
+            background-color: #FFFFFF; /* White background */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Donations</h2>
+        <div id="donation-cards" class="row"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script>
+        const donationCardsContainer = document.getElementById('donation-cards');
+
+        fetch('/api/donations')
+            .then(response => response.json())
+            .then(data => {
+                // Sort donations in descending order by card number
+                data.sort((a, b) => b.cardNumber - a.cardNumber);
+
+                data.forEach((donation, index) => {
+                    const cardHtml = `
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <span class="card-number">${donation.cardNumber}</span>
+                                    <h5 class="card-title">${donation.donorName}</h5>
+                                    <a href="#" class="view-details-link" data-toggle="collapse" data-target="#collapse${index}">View Details</a>
+                                    <div id="collapse${index}" class="collapse mt-5">
+                                        <p class="card-text">Email Address: ${donation.emailAddress}</p>
+                                        <p class="card-text">Phone Number: ${donation.phoneNumber}</p>
+                                        <p class="card-text">Donation Amount: ${donation.donationAmount}</p>
+                                        <p class="card-text">Message: ${donation.message}</p>
+                                        <p class="card-text">Screenshot: 
+                                            <a href="/uploads/${donation.screenshot}" data-lightbox="screenshot-${index}">
+                                                <img src="/uploads/${donation.screenshot}" alt="Screenshot Preview" width="100" height="75">
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    donationCardsContainer.innerHTML += cardHtml;
+                });
+            })
+            .catch(error => console.error('Error fetching donations:', error));
+
+        $(document).ready(function() {
+            $('.view-details-link').on('click', function() {
+                $(this).toggleClass('active');
+                if ($(this).hasClass('active')) {
+                    $(this).text('Close Details');
+                } else {
+                    $(this).text('View Details');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
