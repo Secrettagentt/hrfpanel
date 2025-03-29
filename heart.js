@@ -16,7 +16,12 @@ const PORT = 4000;
 const heartt = process.env.dbConnectionStr
 const dbName = 'HRF';
 
-const client = new MongoClient(heartt, { useUnifiedTopology: true });
+
+const dbConnectionSr = 'mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+
+
+const client = new MongoClient(dbConnectionSr, { useUnifiedTopology: true });
+
 let db;
 
 client.connect().then(() => {
@@ -186,3 +191,8 @@ app.get('/api/data', async (req, res) => {
     }
 });
 
+app.listen(PORT,{
+    
+})
+
+module.exports = app;

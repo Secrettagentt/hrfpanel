@@ -3,13 +3,16 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/node"
+      "use": "@vercel/node"      
     }
   ],
   "routes": [
     {
       "src": "/",
       "dest": "index.html"
+
+      "src": "/api/(.*)",
+      "dest": "heart.js"
     },
     {
       "src": "/api/(.*)",

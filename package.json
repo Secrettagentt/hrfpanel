@@ -19,9 +19,28 @@
     "googleapis": "^148.0.0",
     "mongodb": "^6.15.0",
     "multer": "^1.4.5-lts.1"
+    "type" : "module"
   },
    "type": "module",
   "engines": {
     "node": ">=14.17.0"
   }
+}
+
+
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "heart.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "heart.js"
+        }
+    ]
+   
 }
