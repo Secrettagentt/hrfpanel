@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "heart.js",
+      "src": "package.json",
       "use": "@vercel/static-build"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.js"
+      "dest": "heart.js"
     },
     {
       "src": "/(.*)",
