@@ -189,8 +189,10 @@ app.get('/api/data', async (req, res) => {
     }
 });
 
-app.listen(PORT,{
-    
-})
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+}).on('error', (err) => {
+  console.error('Error starting server:', err);
+});
 
 module.exports = app;
