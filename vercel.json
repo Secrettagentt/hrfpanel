@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/node"      
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -15,6 +15,14 @@
       "src": "/api/(.*)",
       "dest": "heart.js"
     },
+    {
+      "src": "/indsponsors",
+      "dest": "indsponsors.html"
+    },
+    {
+      "src": "/volunteers",
+      "dest": "volunteers.html"
+    }
   ],
   "env": {
     "DB_CONNECTION_STR": "mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
