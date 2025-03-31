@@ -20,7 +20,7 @@ const dbName = 'HRF';
 const dbConnectionStr = 'mongodb+srv://Heartrecovfoundation:Heartrecovfoundation@cluster0.9crw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 
-const client = new MongoClient(dbConnectionSr, { useUnifiedTopology: true });
+const client = new MongoClient(dbConnectionStr, { useUnifiedTopology: true });
 
 let db;
 
@@ -47,7 +47,7 @@ app.use(express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(('./upload'),
-express.static('uploads'));
+express.static(_dirname));
 
 // API Endpoints
 
