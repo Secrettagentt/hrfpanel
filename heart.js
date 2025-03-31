@@ -58,6 +58,10 @@ app.get('/', async (req, res) => {
     }
 });
 
+
+console.log(_dirname);
+
+
 app.get('/volunteers', async (req, res) => {
     try {
         res.sendFile('volunteers.html', { root: __dirname });
