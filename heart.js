@@ -199,4 +199,4 @@ app.listen(PORT, () => {
   console.error('Error starting server:', err);
 });
 
-module.exports = app;
+export default app;
