@@ -59,7 +59,7 @@ app.get('/', async (req, res) => {
 });
 
 
-console.log(_dirname);
+console.log(__dirname);
 
 
 app.get('/volunteers', async (req, res) => {
