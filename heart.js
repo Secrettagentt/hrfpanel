@@ -43,7 +43,7 @@ const upload = multer({
     },
 });
 
-app.use(express.static(_dirname));
+app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
